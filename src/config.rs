@@ -298,6 +298,9 @@ pub struct General {
     #[serde(default = "General::default_shutdown_timeout")]
     pub shutdown_timeout: u64,
 
+    #[serde(default = "General::default_healthcheck_enabled")]
+    pub healthcheck_enabled: bool,
+
     #[serde(default = "General::default_healthcheck_timeout")]
     pub healthcheck_timeout: u64,
 
@@ -391,6 +394,10 @@ impl General {
         30
     }
 
+    pub fn default_healthcheck_enabled() -> bool {
+        true
+    }
+
     pub fn default_healthcheck_timeout() -> u64 {
         1000
     }
@@ -442,6 +449,7 @@ impl Default for General {
             dns_cache_enabled: false,
             dns_max_ttl: Self::default_dns_max_ttl(),
             shutdown_timeout: Self::default_shutdown_timeout(),
+            healthcheck_enabled: Self::default_healthcheck_enabled(),
             healthcheck_timeout: Self::default_healthcheck_timeout(),
             healthcheck_delay: Self::default_healthcheck_delay(),
             ban_time: Self::default_ban_time(),
@@ -1099,6 +1107,10 @@ impl From<&Config> for std::collections::HashMap<String, String> {
                 config.general.idle_timeout.to_string(),
             ),
             (
+                "healthcheck_enabled".to_string(),
+                config.general.healthcheck_enabled.to_string(),
+            ),
+            (
                 "healthcheck_timeout".to_string(),
                 config.general.healthcheck_timeout.to_string(),
             ),
@@ -1135,6 +1147,7 @@ impl Config {
             self.general.idle_client_in_transaction_timeout
         );
         info!("Worker threads: {}", self.general.worker_threads);
+        info!("Healthcheck enabled: {}", self.general.healthcheck_enabled);
         info!(
             "Healthcheck timeout: {}ms",
             self.general.healthcheck_timeout

@@ -178,6 +178,9 @@ configuration:
     # How long a client is allowed to be idle while in a transaction (ms).
     idle_client_in_transaction_timeout: 0 # milliseconds
 
+    # @param configuration.general.healthcheck_enabled Whether to run health checks or not.
+    healthcheck_enabled: true
+
     # @param configuration.general.healthcheck_timeout How much time to give `SELECT 1` health check query to return with a result (ms).
     healthcheck_timeout: 1000
 

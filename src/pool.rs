@@ -180,6 +180,9 @@ pub struct PoolSettings {
     // Sharding key
     pub automatic_sharding_key: Option<String>,
 
+    // Enables/disables health checks.
+    pub healthcheck_enabled: bool,
+
     // Health check timeout
     pub healthcheck_timeout: u64,
 
@@ -225,6 +228,7 @@ impl Default for PoolSettings {
             primary_reads_enabled: true,
             sharding_function: ShardingFunction::PgBigintHash,
             automatic_sharding_key: None,
+            healthcheck_enabled: General::default_healthcheck_enabled(),
             healthcheck_delay: General::default_healthcheck_delay(),
             healthcheck_timeout: General::default_healthcheck_timeout(),
             ban_time: General::default_ban_time(),
@@ -538,6 +542,7 @@ impl ConnectionPool {
                         primary_reads_enabled: pool_config.primary_reads_enabled,
                         sharding_function: pool_config.sharding_function,
                         automatic_sharding_key: pool_config.automatic_sharding_key.clone(),
+                        healthcheck_enabled: config.general.healthcheck_enabled,
                         healthcheck_delay: config.general.healthcheck_delay,
                         healthcheck_timeout: config.general.healthcheck_timeout,
                         ban_time: config.general.ban_time,
@@ -826,6 +831,10 @@ impl ConnectionPool {
         client_info: &ClientStats,
     ) -> bool {
         debug!("Running health check on server {:?}", address);
+
+        if !self.settings.healthcheck_enabled {
+            return true;
+        }
 
         server.stats().tested();
 

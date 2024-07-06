@@ -97,6 +97,14 @@ default: 0 # milliseconds
 
 How long a client is allowed to be idle while in a transaction (ms).
 
+### healthcheck_enabled
+```
+path: general.healthcheck_enabled
+default: true
+```
+
+Whether to run health checks or not.
+
 ### healthcheck_timeout
 ```
 path: general.healthcheck_timeout
