@@ -20,6 +20,9 @@ prometheus_exporter_port = 9930
 # How long to wait before aborting a server connection (ms).
 connect_timeout = 5000
 
+# Whether to run health checks or not.
+healthcheck_enabled = true
+
 # How much time to give `SELECT 1` health check query to return with a result (ms).
 healthcheck_timeout = 1000
 
